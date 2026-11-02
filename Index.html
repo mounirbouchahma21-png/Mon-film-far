@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MONIR BO CINÉMA</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#090909;color:#fff;font-family:Arial,sans-serif}
+header{padding:20px 5%;display:flex;justify-content:space-between;
+align-items:center;background:#111;border-bottom:1px solid #292929}
+.logo{font-size:23px;font-weight:900;color:#f22}
+.logo span{color:white}
+nav a{color:#ddd;text-decoration:none;margin-left:14px;font-size:13px}
+.hero{padding:65px 6% 55px;background:
+linear-gradient(90deg,#090909 10%,#180707dd 65%,#090909),
+radial-gradient(circle at 75% 35%,#9d1717,transparent 55%)}
+.hero small{color:#ff5555;letter-spacing:3px;font-weight:bold}
+.hero h1{font-size:38px;margin:18px 0;max-width:600px}
+.hero p{color:#ccc;line-height:1.7;max-width:520px}
+.btn{display:inline-block;background:#e50914;color:white;
+padding:13px 20px;border-radius:5px;text-decoration:none;
+font-weight:bold;margin-top:22px;border:0;cursor:pointer}
+.search{padding:20px 5%;display:flex;gap:10px}
+.search input{width:100%;padding:14px;border:1px solid #333;
+background:#171717;color:white;border-radius:6px;font-size:15px}
+section{padding:20px 5%}
+h2{font-size:21px;margin-bottom:18px}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.categories button{background:#222;color:white;border:1px solid #444;
+padding:9px 15px;border-radius:20px;cursor:pointer}
+.categories button.active{background:#e50914;border-color:#e50914}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:#171717;border-radius:9px;overflow:hidden;
+border:1px solid #292929}
+.poster{height:145px;display:flex;align-items:center;justify-content:center;
+font-size:25px;font-weight:900;text-align:center;padding:12px;
+background:linear-gradient(135deg,#570b0b,#151515 70%)}
+.card:nth-child(2) .poster{background:linear-gradient(135deg,#153d52,#111)}
+.card:nth-child(3) .poster{background:linear-gradient(135deg,#68400e,#111)}
+.card:nth-child(4) .poster{background:linear-gradient(135deg,#3e185e,#111)}
+.card:nth-child(5) .poster{background:linear-gradient(135deg,#174b36,#111)}
+.card:nth-child(6) .poster{background:linear-gradient(135deg,#4c2530,#111)}
+.info{padding:13px}
+.info h3{font-size:15px;margin-bottom:8px}
+.info p{font-size:12px;color:#aaa;line-height:1.5}
+.info a{display:block;text-align:center;background:#e50914;
+padding:10px;border-radius:5px;color:white;text-decoration:none;
+font-size:13px;font-weight:bold;margin-top:12px}
+.tag{font-size:11px;color:#ff7777;margin-bottom:8px;display:block}
+footer{text-align:center;padding:28px 15px;color:#888;
+border-top:1px solid #292929;margin-top:35px;font-size:12px}
+.notice{color:#aaa;font-size:12px;line-height:1.6;margin-top:15px}
+@media(min-width:700px){
+ .grid{grid-template-columns:repeat(3,1fr)}
+ .hero h1{font-size:52px}
+ .poster{height:190px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">MONIR BO <span>CINÉMA</span></div>
+ <nav>
+  <a href="#accueil">Accueil</a>
+  <a href="#catalogue">Catalogue</a>
+ </nav>
+</header>
+
+<div class="hero" id="accueil">
+ <small>TON UNIVERS CINÉMA</small>
+ <h1>Le cinéma commence ici.</h1>
+ <p>Découvre des films, des séries et des classiques à travers
+des plateformes proposant des contenus gratuits et légaux.</p>
+ <a class="btn" href="#catalogue">Explorer le catalogue</a>
+</div>
+
+<div class="search">
+ <input id="search" type="search"
+ placeholder="Rechercher une catégorie ou une plateforme..."
+ oninput="filterCards()">
+</div>
+
+<section id="catalogue">
+ <h2>Explorer les contenus</h2>
+
+ <div class="categories">
+  <button class="active" onclick="choose('all',this)">Tout</button>
+  <button onclick="choose('film',this)">Films</button>
+  <button onclick="choose('serie',this)">Séries</button>
+  <button onclick="choose('arabe',this)">Arabe</button>
+  <button onclick="choose('classique',this)">Classiques</button>
+ </div>
+
+ <div class="grid" id="grid">
+
+  <article class="card" data-type="film" data-name="plex films internationaux">
+   <div class="poster">PLEX</div>
+   <div class="info">
+    <span class="tag">FILMS & SÉRIES</span>
+    <h3>Cinéma international</h3>
+    <p>Une sélection de films et de séries gratuits avec publicité, selon le pays.</p>
+    <a href="https://watch.plex.tv/" target="_blank">Explorer Plex</a>
+   </div>
+  </article>
+
+  <article class="card" data-type="serie arabe" data-name="shahid séries arabes">
+   <div class="poster">SHAHID</div>
+   <div class="info">
+    <span class="tag">CONTENU ARABE</span>
+    <h3>Séries arabes</h3>
+    <p>Des épisodes gratuits sont proposés sur certains programmes. D'autres sont payants.</p>
+    <a href="https://shahid.mbc.net/" target="_blank">Découvrir Shahid</a>
+   </div>
+  </article>
+
+  <article class="card" data-type="film serie" data-name="tf1 films séries français">
+   <div class="poster">TF1+</div>
+   <div class="info">
+    <span class="tag">FILMS & SÉRIES</span>
+    <h3>Films et séries francophones</h3>
+    <p>Une offre gratuite de programmes disponible sur le site marocain.</p>
+    <a href="https://www.tf1.fr/fr-ma/" target="_blank">Explorer TF1+</a>
+   </div>
+  </article>
+
+  <article class="card" data-type="classique film" data-name="archive classiques cinéma">
+   <div class="poster">CLASSIQUES</div>
+   <div class="info">
+    <span class="tag">CINÉMA CLASSIQUE</span>
+    <h3>Films classiques</h3>
+    <p>Des films d'archives. Vérifie la licence de chaque œuvre avant utilisation.</p>
+    <a href="https://archive.org/details/feature_films" target="_blank">Explorer les archives</a>
+   </div>
+  </article>
+
+  <article class="card" data-type="serie arabe" data-name="séries arabes shahid">
+   <div class="poster">ARABIC</div>
+   <div class="info">
+    <span class="tag">SÉRIES ARABES</span>
+    <h3>Univers des séries arabes</h3>
+    <p>Retrouve les programmes gratuits disponibles sur la plateforme officielle.</p>
+    <a href="https://shahid.mbc.net/" target="_blank">Voir les programmes</a>
+   </div>
+  </article>
+
+  <article class="card" data-type="film classique" data-name="films gratuits plex">
+   <div class="poster">CINÉMA</div>
+   <div class="info">
+    <span class="tag">SÉLECTION GRATUITE</span>
+    <h3>Films à découvrir</h3>
+    <p>Explore le catalogue gratuit de Plex. Les langues et sous-titres varient selon le titre.</p>
+    <a href="https://watch.plex.tv/" target="_blank">Voir les films</a>
+   </div>
+  </article>
+
+ </div>
+ <p class="notice">MONIR BO CINÉMA est un portail de découverte.
+La disponibilité, les publicités et les sous-titres dépendent de chaque plateforme.</p>
+</section>
+
+<footer>
+ © 2026 MONIR BO CINÉMA — Tous droits réservés.
+</footer>
+
+<script>
+let current = "all";
+
+function choose(type,button){
+ current = type;
+ document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
+ button.classList.add("active");
+ filterCards();
+}
+
+function filterCards(){
+ const q = document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll(".card").forEach(card=>{
+  const type = card.dataset.type;
+  const name = card.dataset.name;
+  const matchType = current === "all" || type.includes(current);
+  const matchSearch = name.includes(q) || card.innerText.toLowerCase().includes(q);
+  card.style.display = matchType && matchSearch ? "" : "none";
+ });
+}
+</script>
+
+</body>
+</html>
