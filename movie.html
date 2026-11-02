@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <title>CinéMaroc</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#080808;color:#fff;font-family:Arial,system-ui,sans-serif}
+    header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:22px;padding:12px 4%;background:#090909f2;border-bottom:1px solid #292929}
+    .logo{font-size:25px;font-weight:900;color:#e50914;white-space:nowrap}
+    nav{display:flex;gap:16px}
+    nav a{color:#eee;text-decoration:none;font-size:14px}
+    #search{margin-right:auto;width:min(260px,35vw);padding:10px 12px;background:#171717;border:1px solid #555;border-radius:5px;color:#fff}
+    .hero{min-height:390px;display:flex;align-items:end;padding:35px 5%;background:linear-gradient(0deg,#080808 0%,#08080888 45%,#0002),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85') center/cover}
+    .hero-content{max-width:600px}
+    .hero h1{font-size:clamp(34px,6vw,60px);margin:10px 0}
+    .hero p{line-height:1.8;color:#eee}
+    .button{display:inline-block;background:#fff;color:#111;border:0;border-radius:4px;padding:12px 18px;font-weight:bold;cursor:pointer;text-decoration:none}
+    .section{padding:24px 4%}
+    .section h2{font-size:22px;margin:0 0 15px}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .chip{border:1px solid #555;background:#202020;color:#fff;padding:8px 13px;border-radius:20px;cursor:pointer}
+    .chip.active{background:#fff;color:#111}
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:15px}
+    .card{cursor:pointer;min-width:0}
+    .poster{height:230px;border-radius:5px;overflow:hidden;position:relative;background:linear-gradient(145deg,#33516b,#101722)}
+    .poster img{width:100%;height:100%;object-fit:cover;display:block}
+    .poster:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#000b)}
+    .play{position:absolute;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border:2px solid white;border-radius:50%;display:grid;place-items:center;background:#0008;font-size:20px}
+    .card h3{font-size:14px;margin:8px 2px 4px}
+    .meta{font-size:12px;color:#aaa;margin:0 2px}
+    .empty{color:#aaa;padding:15px}
+    .modal{display:none;position:fixed;inset:0;background:#000e;z-index:10;align-items:center;justify-content:center;padding:14px}
+    .modal.open{display:flex}
+    .player-box{width:min(950px,100%);background:#181818;border-radius:8px;overflow:hidden}
+    .player-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+    .close{font-size:27px;background:none;color:white;border:0;cursor:pointer}
+    .video{aspect-ratio:16/9;background:#000}
+    .video video{width:100%;height:100%}
+    .description{padding:12px 16px;color:#bbb;font-size:13px;line-height:1.8}
+    footer{padding:22px 4%;color:#888;border-top:1px solid #252525;font-size:12px;line-height:1.8}
+    @media(max-width:600px){
+      header{flex-wrap:wrap;gap:10px}
+      nav{order:3;width:100%}
+      #search{width:145px}
+      .hero{min-height:350px}
+      .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+      .poster{height:205px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">CINÉMAROC</div>
+    <nav>
+      <a href="#home">الرئيسية</a>
+      <a href="#library">المكتبة</a>
+    </nav>
+    <input id="search" type="search" placeholder="قلب على فيلم..." aria-label="بحث">
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div style="color:#ffb5b9;font-size:12px;font-weight:bold">مكتبة مشاهدة مجانية وقانونية</div>
+      <h1>تفرّج هنا، بلا تحويل</h1>
+      <p>اختار الفيلم واضغط على الصورة. الفيديو كيتحل داخل CinéMaroc، ماشي فموقع آخر، إلا كان المصدر كيسمح بالتشغيل المباشر.</p>
+      <a class="button" href="#library">تصفح المكتبة ↓</a>
+    </div>
+  </section>
+
+  <main>
+    <section class="section" id="library">
+      <h2>مكتبة الأفلام</h2>
+      <div class="filters" id="filters">
+        <button class="chip active" data-category="الكل">الكل</button>
+        <button class="chip" data-category="رسوم متحركة">رسوم متحركة</button>
+        <button class="chip" data-category="وثائقي">وثائقي</button>
+      </div>
+      <div class="cards" id="cards"></div>
+    </section>
+  </main>
+
+  <footer>
+    <b>CinéMaroc</b> — نموذج قابل للتعديل. أضف فقط فيديوهات تملك حق بثها أو المرخّصة لإعادة العرض.
+    الفيلم التجريبي Big Buck Bunny من Blender Foundation مرخّص بموجب Creative Commons Attribution 3.0؛ احتفظ بالاعتماد عند إعادة نشره.
+  </footer>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="player-box">
+      <div class="player-head">
+        <b id="playerTitle">مشاهدة الفيلم</b>
+        <button class="close" id="closePlayer" aria-label="إغلاق">×</button>
+      </div>
+      <div class="video" id="videoArea"></div>
+      <div class="description" id="description"></div>
+    </div>
+  </div>
+
+  <script>
+    // زِد الأفلام هنا: title وcategory وyear وposter وvideoUrl وdescription.
+    // videoUrl خاصو يكون رابط فيديو مباشر ومسموح بإعادة عرضه.
+    const movies = [
+      {
+        title: "Big Buck Bunny",
+        category: "رسوم متحركة",
+        year: "2008",
+        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&q=85",
+        videoUrl: "https://download.blender.org/demo/movies/BBB/big_buck_bunny_1080p_h264.mov",
+        description: "فيلم رسوم متحركة قصير من Blender Foundation. متاح بترخيص Creative Commons Attribution 3.0."
+      }
+    ];
+
+    let activeCategory = "الكل";
+    const cards = document.getElementById("cards");
+    const search = document.getElementById("search");
+    const modal = document.getElementById("modal");
+    const videoArea = document.getElementById("videoArea");
+
+    function renderMovies() {
+      const term = search.value.trim().toLowerCase();
+      const visible = movies.filter(movie =>
+        (activeCategory === "الكل" || movie.category === activeCategory) &&
+        (movie.title.toLowerCase().includes(term) || movie.category.toLowerCase().includes(term))
+      );
+
+      cards.innerHTML = visible.length ? visible.map((movie, index) => `
+        <article class="card" data-index="${movies.indexOf(movie)}" tabindex="0">
+          <div class="poster">
+            <img loading="lazy" src="${movie.poster}" alt="صورة توضيحية لفيلم ${movie.title}">
+            <span class="play">▶</span>
+          </div>
+          <h3>${movie.title}</h3>
+          <p class="meta">${movie.category} · ${movie.year}</p>
+        </article>
+      `).join("") : '<p class="empty">ما لقينا حتى نتيجة.</p>';
+    }
+
+    function openMovie(movie) {
+      document.getElementById("playerTitle").textContent = movie.title;
+      document.getElementById("description").textContent = movie.description;
+      videoArea.innerHTML = "";
+      const video = document.createElement("video");
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.preload = "metadata";
+      video.src = movie.videoUrl;
+      videoArea.appendChild(video);
+      modal.classList.add("open");
+    }
+
+    function closeMovie() {
+      const video = videoArea.querySelector("video");
+      if (video) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      }
+      videoArea.innerHTML = "";
+      modal.classList.remove("open");
+    }
+
+    cards.addEventListener("click", event => {
+      const card = event.target.closest(".card");
+      if (card) openMovie(movies[Number(card.dataset.index)]);
+    });
+    cards.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        const card = event.target.closest(".card");
+        if (card) openMovie(movies[Number(card.dataset.index)]);
+      }
+    });
+    search.addEventListener("input", renderMovies);
+    document.getElementById("filters").addEventListener("click", event => {
+      const button = event.target.closest("button[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      document.querySelectorAll(".chip").forEach(chip => chip.classList.toggle("active", chip === button));
+      renderMovies();
+    });
+    document.getElementById("closePlayer").addEventListener("click", closeMovie);
+    modal.addEventListener("click", event => { if (event.target === modal) closeMovie(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") closeMovie(); });
+
+    renderMovies();
+  </script>
+</body>
+</html>
